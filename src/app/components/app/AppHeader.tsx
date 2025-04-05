@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
-import LoginForm from "./LoginForm";
+import AppDialogLogin from "./AppDialogLgin";
 
 export const AppHeader = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   const [showLogin, setShowLogin] = useState(false);
+
+  const pathname = usePathname();
 
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
@@ -31,49 +33,53 @@ export const AppHeader = () => {
               </a>
             </div>
             <div className="header-right inline-flex w-full shrink items-center justify-end space-x-16">
-              <button
-                className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled !p-0 rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] ml-2 size-[48px]"
-                type="button"
-              >
-                <div className="flex items-center justify-center w-full">
-                  <div className="flex items-center justify-center">
-                    <div className="relative flex items-center justify-center">
-                      <Image
-                        src="/images/mobile-cart.svg"
-                        alt="cart icon"
-                        width={32}
-                        height={32}
-                        className="flex shrink-0 hover:drop-shadow-lg"
-                      ></Image>
-                    </div>
-                  </div>
-                </div>
-              </button>
-              {!isCartOpen && (
-                <div
-                  className="fixed right-0 top-1/2 z-20 hidden h-fit -translate-y-1/2 lg:flex items-center justify-center"
-                  onClick={toggleCart}
+              {pathname !== "/login" && pathname !== "/register" && (
+                <button
+                  className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled !p-0 rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] ml-2 size-[48px]"
+                  type="button"
                 >
-                  <div className="relative flex h-[110px] w-[88px] flex-col items-center justify-center gap-1 rounded-l-lg px-8 py-16 bg-background-brand shadow-[0px_8px_16px_-4px_rgba(3,6,15,0.32)] cursor-pointer transition-all hover:w-[100px]">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="text-[14px]"
-                    >
-                      <path
-                        d="M18 6H16C16 3.79 14.21 2 12 2C9.79 2 8 3.79 8 6H6C4.9 6 4 6.9 4 8V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8C20 6.9 19.1 6 18 6ZM10 10C10 10.55 9.55 11 9 11C8.45 11 8 10.55 8 10V8H10V10ZM12 4C13.1 4 14 4.9 14 6H10C10 4.9 10.9 4 12 4ZM16 10C16 10.55 15.55 11 15 11C14.45 11 14 10.55 14 10V8H16V10Z"
-                        fill="white"
-                      ></path>
-                    </svg>
-                    <div className="text-white text-center text-title-sm-bold text-text-invert">
-                      ตะกร้า
+                  <div className="flex items-center justify-center w-full">
+                    <div className="flex items-center justify-center">
+                      <div className="relative flex items-center justify-center">
+                        <Image
+                          src="/images/mobile-cart.svg"
+                          alt="cart icon"
+                          width={32}
+                          height={32}
+                          className="flex shrink-0 hover:drop-shadow-lg"
+                        ></Image>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </button>
               )}
+              {pathname !== "/login" &&
+                pathname !== "/register" &&
+                !isCartOpen && (
+                  <div
+                    className="fixed right-0 top-1/2 z-20 hidden h-fit -translate-y-1/2 lg:flex items-center justify-center"
+                    onClick={toggleCart}
+                  >
+                    <div className="relative flex h-[110px] w-[88px] flex-col items-center justify-center gap-1 rounded-l-lg px-8 py-16 bg-background-brand shadow-[0px_8px_16px_-4px_rgba(3,6,15,0.32)] cursor-pointer transition-all hover:w-[100px]">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-[14px]"
+                      >
+                        <path
+                          d="M18 6H16C16 3.79 14.21 2 12 2C9.79 2 8 3.79 8 6H6C4.9 6 4 6.9 4 8V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8C20 6.9 19.1 6 18 6ZM10 10C10 10.55 9.55 11 9 11C8.45 11 8 10.55 8 10V8H10V10ZM12 4C13.1 4 14 4.9 14 6H10C10 4.9 10.9 4 12 4ZM16 10C16 10.55 15.55 11 15 11C14.45 11 14 10.55 14 10V8H16V10Z"
+                          fill="white"
+                        ></path>
+                      </svg>
+                      <div className="text-white text-center text-title-sm-bold text-text-invert">
+                        ตะกร้า
+                      </div>
+                    </div>
+                  </div>
+                )}
               <div className="py-4">
                 <button
                   className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4"
@@ -245,8 +251,11 @@ export const AppHeader = () => {
                         </div>
                       </a>
                     </div>
-                    <button className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] flex items-center text-title-md-medium">
-                      <div className="flex items-center justify-center w-full gap-8">
+                    <a
+                      href="/login"
+                      className="relative max-w-full cursor-pointer space-x-2 font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-4 py-3 text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-2 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-3 md:text-title-md-medium md:!leading-[22px] flex items-center"
+                    >
+                      <button className="w-full flex items-center justify-center gap-2">
                         <Image
                           src="/images/person.svg"
                           alt="login or register"
@@ -254,8 +263,8 @@ export const AppHeader = () => {
                           height={16}
                         />
                         <span>เข้าสู่ระบบ / ลงทะเบียน</span>
-                      </div>
-                    </button>
+                      </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -271,21 +280,23 @@ export const AppHeader = () => {
               ></Image>
             </a>
             <div className="flex flex-row justify-end space-x-8">
-              <button className="flex size-[40px] shrink-0 items-center justify-center">
-                <div className="relative flex items-center justify-center">
-                  <Image
-                    src="/images/mobile-cart.svg"
-                    alt="cart icon"
-                    width={24}
-                    height={24}
-                  ></Image>
-                </div>
-              </button>
+              {pathname !== "/login" && pathname !== "/register" && (
+                <button className="flex size-[40px] shrink-0 items-center justify-center">
+                  <div className="relative flex items-center justify-center">
+                    <Image
+                      src="/images/mobile-cart.svg"
+                      alt="cart icon"
+                      width={24}
+                      height={24}
+                    ></Image>
+                  </div>
+                </button>
+              )}
             </div>
           </div>
         </section>
       </header>
-      {showLogin && <LoginForm setShowLogin={setShowLogin} />}
+      {showLogin && <AppDialogLogin setShowLogin={setShowLogin} />}
     </>
   );
 };
