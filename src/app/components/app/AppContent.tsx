@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PromotionCard from "../ui/PromotionCard";
 import MenuCardList from "../ui/MenuCardList";
+import AppFooter from "./AppFooter";
 
 const promotions = [
   {
@@ -144,6 +145,7 @@ export default function AppContent() {
           </div>
         </section>
       </section>
+      <AppFooter/>
     </main>
   );
 }
