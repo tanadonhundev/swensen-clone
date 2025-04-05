@@ -1,7 +1,7 @@
 import Image from "next/image";
 import PromotionCard from "../ui/PromotionCard";
 import MenuCardList from "../ui/MenuCardList";
-import AppFooter from "./AppFooter";
+import AppFooter from "../app/AppFooter";
 
 const promotions = [
   {
@@ -102,7 +102,7 @@ export default function AppContent() {
           <div className="mt-5 flex justify-center p-4">
             <span className="transition-color mx-1 inline-block size-2 cursor-pointer rounded-full border duration-200 hover:opacity-75  md:size-[12px] border-border-brand bg-background-brand"></span>
           </div>
-          {/* menu basePage */}
+          {/* Promotion */}
           <div className="flex flex-col gap-24">
             <div className="flex w-full flex-col items-center gap-44">
               <div className="w-full">
@@ -121,7 +121,7 @@ export default function AppContent() {
             </div>
           </div>
           <div className="flex items-center justify-between ">
-          <p className="text-4xl">เมนูจัดส่ง</p>
+            <p className="text-4xl">เมนูจัดส่ง</p>
           </div>
           <div className="flex w-full flex-col items-center gap-44">
             <div className="flex w-full items-center gap-16 overflow-y-auto overflow-auto sm:flex-wrap pb-4 sm:pb-0 !px-0 gap-x-[12px]">
@@ -137,7 +137,24 @@ export default function AppContent() {
                 ]}
               />
             </div>
-            <div></div>
+            {/* taps card */}
+            <div className="flex flex-col gap-24">
+              <div className="flex w-full flex-col items-center gap-44">
+                <div className="w-full">
+                  <p className="text-4xl">โปรโมชัน</p>
+                  <div className="grid h-fit w-full grid-cols-2 gap-32 md:grid-cols-3 lg:grid-cols-4">
+                    {promotions.map((promo, index) => (
+                      <PromotionCard
+                        key={index}
+                        imageUrl={promo.imageUrl}
+                        title={promo.title}
+                        price={promo.price}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </section>
