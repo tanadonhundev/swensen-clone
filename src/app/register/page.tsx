@@ -1,12 +1,12 @@
 import Image from "next/image";
-import LoginForm from "../components/app/LoginForm";
 import Link from "next/link";
+import RegisterForm from "../components/app/RegisterFrom";
 
 export default function Page() {
   return (
     <>
       <section className="w-full overflow-x-hidden bg-surface-secondary">
-        <section className="relative mx-auto w-full p-24 pb-40 max-w-screen-2xl min-h-screen !py-0">
+        <section className="relative mx-auto w-full p-1 pb-40 max-w-screen-2xl min-h-screen !py-0">
           <section className="relative w-full xl:min-h-screen grid grid-cols-4 gap-6 md:grid-cols-8 lg:grid-cols-12 lg:gap-32 h-full py-40 lg:py-40">
             <div className="col-span-1 hidden lg:block"></div>
             <div className="col-span-full lg:col-span-5">
@@ -35,13 +35,13 @@ export default function Page() {
                   </button>
                   <section className="flex items-center space-x-8">
                     <span className="text-text_primary text-right text-title-md-medium">
-                      ยังไม่มีบัญชีใช่หรือไม่
+                      มีบัญชีสมาชิกอยู่แล้วใช่หรือไม่
                     </span>
-                    <a href="/register">
+                    <a href="/login">
                       <button className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border border-border-brand bg-state-layer-primary-default fill-text-brand text-text-brand hover:bg-state-layer-brand-hovered hover:fill-text-invert hover:text-text-invert focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:!border-0 disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px]">
                         <div className="flex items-center justify-center w-full">
                           <div className="flex items-center justify-center">
-                            สร้างบัญชี
+                            เข้าสู่ระบบ
                           </div>
                         </div>
                       </button>
@@ -70,7 +70,7 @@ export default function Page() {
                       </div>
                     </div>
                   </button>
-                  <LoginForm />
+                  <RegisterForm />
                 </section>
               </div>
             </div>

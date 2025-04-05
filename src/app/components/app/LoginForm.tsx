@@ -10,7 +10,6 @@ export default function LoginForm() {
 
   return (
     <>
-      {" "}
       <p className="text-4xl">
         ยินดีต้อนรับสมาชิก Swensen&apos;s เข้าสู่ระบบแล้วเริ่มสั่งไอศกรีมกันเลย!
       </p>
@@ -23,7 +22,7 @@ export default function LoginForm() {
             </label>
             <div className="mur-input-wrapper flex w-full">
               <input
-                type="text"
+                type="email"
                 placeholder="อีเมล"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
               />
