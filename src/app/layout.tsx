@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { kanit } from "./fonts";
 import { AppHeader } from "./components/app/AppHeader";
+import AppFooter from "./components/app/AppFooter";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,6 +19,7 @@ export default function RootLayout({
       <body className={kanit.className}>
         <AppHeader />
         {children}
+        <AppFooter />
       </body>
     </html>
   );

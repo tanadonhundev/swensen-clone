@@ -2,14 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import LoginForm from "./LoginForm";
 
 export const AppHeader = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const [showLogin, setShowLogin] = useState(false);
+
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
   };
+
   return (
     <>
       <header className="site-header sticky top-0 z-20 hidden h-[80px] w-full gap-8 bg-background-white px-16 [box-shadow:0_2px_15px_rgba(0,0,0,.05)] lg:flex">
@@ -74,6 +78,7 @@ export const AppHeader = () => {
                 <button
                   className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4"
                   type="button"
+                  onClick={() => setShowLogin(true)}
                 >
                   <div className="flex items-center justify-center w-full">
                     <div className="flex items-center justify-center">
@@ -280,6 +285,7 @@ export const AppHeader = () => {
           </div>
         </section>
       </header>
+      {showLogin && <LoginForm setShowLogin={setShowLogin} />}
     </>
   );
 };
