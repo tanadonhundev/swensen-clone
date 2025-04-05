@@ -42,7 +42,6 @@ export default function LoginForm() {
                 onClick={togglePasswordVisibility}
                 stroke="currentColor"
                 fill="currentColor"
-                stroke-width="0"
                 viewBox="0 0 256 256"
                 color="#1D2939"
                 height="20"

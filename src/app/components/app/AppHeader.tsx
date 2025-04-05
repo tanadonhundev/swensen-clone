@@ -117,7 +117,6 @@ export const AppHeader = () => {
                       <svg
                         stroke="currentColor"
                         fill="currentColor"
-                        stroke-width="0"
                         viewBox="0 0 16 16"
                         className="size-[24px]"
                         width="1em"

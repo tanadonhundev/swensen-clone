@@ -69,7 +69,6 @@ export default function RegisterForm() {
                 onClick={togglePasswordVisibility}
                 stroke="currentColor"
                 fill="currentColor"
-                stroke-width="0"
                 viewBox="0 0 256 256"
                 color="#1D2939"
                 height="20"
@@ -158,7 +157,6 @@ export default function RegisterForm() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       stroke="currentColor"
-                      stroke-width="1"
                     >
                       <path
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -172,7 +170,6 @@ export default function RegisterForm() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       stroke="currentColor"
-                      stroke-width="1"
                     >
                       <rect
                         x="3"
@@ -216,7 +213,6 @@ export default function RegisterForm() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       stroke="currentColor"
-                      stroke-width="1"
                     >
                       <path
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -230,7 +226,6 @@ export default function RegisterForm() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       stroke="currentColor"
-                      stroke-width="1"
                     >
                       <rect
                         x="3"
