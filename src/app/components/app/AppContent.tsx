@@ -106,9 +106,7 @@ export default function AppContent() {
           <div className="flex flex-col gap-24">
             <div className="flex w-full flex-col items-center gap-44">
               <div className="w-full">
-                <h2 className="mb-6 mt-4 text-left text-title-md-bold sm:text-headline-medium 2xl:text-headline-large">
-                  โปรโมชัน
-                </h2>
+                <p className="text-4xl">โปรโมชัน</p>
                 <div className="grid h-fit w-full grid-cols-2 gap-32 md:grid-cols-3 lg:grid-cols-4">
                   {promotions.map((promo, index) => (
                     <PromotionCard
@@ -123,9 +121,7 @@ export default function AppContent() {
             </div>
           </div>
           <div className="flex items-center justify-between ">
-            <div className="flex text-title-md-bold sm:text-headline-medium 2xl:text-headline-large">
-              เมนูจัดส่ง
-            </div>
+          <p className="text-4xl">เมนูจัดส่ง</p>
           </div>
           <div className="flex w-full flex-col items-center gap-44">
             <div className="flex w-full items-center gap-16 overflow-y-auto overflow-auto sm:flex-wrap pb-4 sm:pb-0 !px-0 gap-x-[12px]">
@@ -145,7 +141,7 @@ export default function AppContent() {
           </div>
         </section>
       </section>
-      <AppFooter/>
+      <AppFooter />
     </main>
   );
 }
