@@ -26,7 +26,6 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Link from "next/link";
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "กรุณากรอกอย่างน้อย 2 ตัวอักษร" }),
@@ -367,21 +366,20 @@ export default function RegisterForm() {
                 </div>
               </div>
             </div>
-            <Link href={"/register"}>
-              <button
-                type="submit"
-                disabled={
-                  !form.watch("acceptMarketing") || !form.watch("acceptTerms")
-                }
-                className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] w-full"
-              >
-                <div className="flex items-center justify-center w-full">
-                  <div className="flex items-center justify-center">
-                    สร้างบัญชี
-                  </div>
+
+            <button
+              type="submit"
+              disabled={
+                !form.watch("acceptMarketing") || !form.watch("acceptTerms")
+              }
+              className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] w-full"
+            >
+              <div className="flex items-center justify-center w-full">
+                <div className="flex items-center justify-center">
+                  สร้างบัญชี
                 </div>
-              </button>
-            </Link>
+              </div>
+            </button>
           </form>
         </Form>
       </div>

@@ -144,17 +144,19 @@ export const AppHeader = () => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
-                    <button
-                      className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4"
-                      type="button"
-                      onClick={handleClick}
-                    >
-                      <div className="flex items-center justify-center w-full">
-                        <div className="flex items-center justify-center">
-                          เข้าสู่ระบบ / ลงทะเบียน
+                    <>
+                      <button
+                        className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] text-title-lg-medium border border-border-brand bg-state-layer-primary-default fill-text-brand text-text-brand hover:bg-state-layer-brand-hovered hover:fill-text-invert hover:text-text-invert focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:!border-0 disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] px-16 py-8 text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px]"
+                        type="button"
+                        onClick={handleClick}
+                      >
+                        <div className="flex items-center justify-center w-full">
+                          <div className="flex items-center justify-center">
+                            เข้าสู่ระบบ / ลงทะเบียน
+                          </div>
                         </div>
-                      </div>
-                    </button>
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

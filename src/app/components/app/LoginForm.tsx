@@ -124,6 +124,17 @@ export default function LoginForm() {
             </button>
           </form>
         </Form>
+        <div className="flex w-full items-center justify-center">
+          <span className="text-body-md-regular">ยังไม่มีบัญชีใช่หรือไม่</span>
+          <a
+            href="/register"
+            className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-sm min-h-[32px] sm:text-title-sm-medium rounded-sm bg-state-layer-primary-default fill-text-tertiary text-text-tertiary hover:bg-state-layer-primary-hovered focus:bg-state-layer-brand-focused disabled:bg-transparent gap-x-8 h-[32px] px-12 py-8 text-title-sm-medium !leading-[18px]"
+          >
+            <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center">สร้างบัญชี</div>
+            </div>
+          </a>
+        </div>
       </div>
     </>
   );
