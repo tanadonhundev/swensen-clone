@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Link from "next/link";
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "กรุณากรอกอย่างน้อย 2 ตัวอักษร" }),
@@ -57,8 +58,8 @@ export default function RegisterForm() {
       email: "",
       password: "",
       phone: "",
-      gender: "male", // แก้จาก famel เป็น female
-      dob: undefined, // หรือใส่เป็น new Date("2000-01-01") ก็ได้
+      gender: "male",
+      dob: undefined,
       acceptTerms: false,
       acceptMarketing: false,
     },
@@ -82,26 +83,20 @@ export default function RegisterForm() {
           onSuccess: async (ctx) => {
             console.log("success", ctx.data);
             alert("สมัครสำเร็จ");
-            console.log(ctx.data.user.id);
-
             try {
               // Submit user data after successful sign-up
-              const response = await fetch("/api/user", {
+              await fetch("/api/user", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                   id: ctx.data.user.id,
-                  birthDate: data.dob, // Use data from form directly
-                  gender: data.gender, // Use data from form directly
+                  birthDate: data.dob,
+                  gender: data.gender,
                   phone: data.phone,
                 }),
               });
-
-              const responseData = await response.json();
-              console.log(responseData); // Handle the response here
-
               // Redirect to login page after successful submission
               router.replace("/login");
             } catch (error) {
@@ -372,19 +367,21 @@ export default function RegisterForm() {
                 </div>
               </div>
             </div>
-            <button
-              type="submit"
-              disabled={
-                !form.watch("acceptMarketing") || !form.watch("acceptTerms")
-              }
-              className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] w-full"
-            >
-              <div className="flex items-center justify-center w-full">
-                <div className="flex items-center justify-center">
-                  สร้างบัญชี
+            <Link href={"/register"}>
+              <button
+                type="submit"
+                disabled={
+                  !form.watch("acceptMarketing") || !form.watch("acceptTerms")
+                }
+                className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] w-full"
+              >
+                <div className="flex items-center justify-center w-full">
+                  <div className="flex items-center justify-center">
+                    สร้างบัญชี
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </Link>
           </form>
         </Form>
       </div>
