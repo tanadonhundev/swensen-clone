@@ -65,7 +65,7 @@ export const verification = mysqlTable("verification", {
 });
 
 // ProductCategory Table
-export const ProductCategory = mysqlTable(
+export const productcategory = mysqlTable(
   "product_category",
   {
     id: int().autoincrement().notNull(),
@@ -77,13 +77,13 @@ export const ProductCategory = mysqlTable(
 );
 
 // ProductItem Table
-export const ProductItem = mysqlTable(
+export const productitem = mysqlTable(
   "product_item",
   {
     id: int().autoincrement().notNull(),
     categoryId: int("category_id")
       .notNull()
-      .references(() => ProductCategory.id),
+      .references(() => productcategory.id),
     description: text("description"),
     price: decimal({ precision: 10, scale: 2 }).notNull(),
     imageName: text("image_name").notNull(),
