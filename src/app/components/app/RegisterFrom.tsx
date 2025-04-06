@@ -1,7 +1,7 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,32 +24,43 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "กรุณากรอกอย่างน้อย 2 ตัวอักษร" }),
   lastName: z.string().min(2, { message: "กรุณากรอกอย่างน้อย 2 ตัวอักษร" }),
   email: z.string().email({ message: "กรุณากรอกอีเมลให้ถูกต้อง" }).trim(),
   password: z.string().min(8, { message: "ต้องมีอย่างน้อย 8 ตัว" }).trim(),
-  phon: z
+  phone: z
     .string()
     .min(10, { message: "กรุณากรอกเบอร์โทรศัพท์" })
     .max(10, "กรุณากรอกเบอร์โทรศัพท์"),
+  gender: z.enum(["male", "female", "other"], {
+    required_error: "กรุณาเลือกเพศ",
+  }),
   dob: z.date({
     required_error: "กรุณาใส่วันเกิด",
   }),
+  acceptTerms: z.boolean(),
+  acceptMarketing: z.boolean(),
 });
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({
-    gender: "",
-  });
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
+      phone: "",
+      gender: "male", // แก้จาก famel เป็น female
+      dob: undefined, // หรือใส่เป็น new Date("2000-01-01") ก็ได้
+      acceptTerms: false,
+      acceptMarketing: false,
     },
     mode: "all",
   });
@@ -83,8 +94,8 @@ export default function RegisterForm() {
                 body: JSON.stringify({
                   id: ctx.data.user.id,
                   birthDate: data.dob, // Use data from form directly
-                  gender: formData.gender, // Use data from form directly
-                  phone: data.phon,
+                  gender: data.gender, // Use data from form directly
+                  phone: data.phone,
                 }),
               });
 
@@ -103,12 +114,6 @@ export default function RegisterForm() {
     } catch (error) {
       console.error("Error during sign-up process:", error);
     }
-  };
-
-  // const router = useRouter();
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -143,7 +148,7 @@ export default function RegisterForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>อีเมล</FormLabel>
+                    <FormLabel>นามสกุล</FormLabel>
                     <FormControl>
                       <Input {...field} type="text" placeholder="นามสกุล" />
                     </FormControl>
@@ -235,7 +240,7 @@ export default function RegisterForm() {
             <div className="flex flex-col gap-[8px]">
               <FormField
                 control={form.control}
-                name="phon"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>เบอร์โทรศัพท์</FormLabel>
@@ -252,157 +257,126 @@ export default function RegisterForm() {
               />
             </div>
             <div className="flex w-full flex-col  gap-16">
-              <section>
-                <label className="text-label-medium text-text-primary">
-                  เพศ
-                </label>
-                <span className="text-text-error">*</span>
-              </section>
-              <div className="w-full">
-                <div className="flex space-x-32 md:space-x-36">
-                  <div className="flex flex-col gap-[8px]">
-                    <fieldset className="flex flex-wrap gap-[16px]">
-                      {[
-                        { label: "ชาย", value: "male" },
-                        { label: "หญิง", value: "female" },
-                        { label: "ไม่ระบุ", value: "other" },
-                      ].map((item, index) => (
-                        <label
-                          key={index}
-                          className="[&_.ri-label]:text-title-sm-medium [&_.ri-supporting-text]:text-body-sm-regular flex items-center gap-x-[8px] cursor-pointer"
-                        >
-                          <input
-                            type="radio"
-                            name="gender"
-                            value={item.value}
-                            checked={formData.gender === item.value}
-                            onChange={handleChange}
-                            className="relative size-[16px] cursor-pointer appearance-none rounded-full border border-border-primary hover:bg-state-layer-primary-focused focus:border-none focus:bg-state-layer-primary-focused disabled:cursor-not-allowed disabled:border-none disabled:bg-state-layer-primary-disabled before:content[''] before:absolute before:left-1/2 before:top-1/2 before:size-full before:-translate-y-1/2 before:block before:-translate-x-1/2 before:rounded-full before:opacity-0 before:transition-opacity hover:before:[box-shadow:0px_0px_0px_2px_rgba(234,236,240,1)] focus:before:bg-state-layer-primary-focused hover:before:bg-state-layer-brand-hover hover:before:shadow-3xl checked:!border-none checked:hover:checked:bg-transparent checked:focus:bg-transparent checked:before:bg-background-brand checked:before:opacity-100 checked:focus:before:border checked:focus:before:border-border-brand checked:focus:before:bg-state-layer-brand-focused checked:disabled:before:bg-state-layer-primary-disabled after:content[''] after:absolute after:left-1/2 after:top-1/2 after:size-[6px] after:-translate-y-1/2 after:block after:-translate-x-1/2 after:rounded-full after:opacity-0 after:transition-opacity disabled:after:bg-icon-secondary checked:after:bg-icon-invert checked:after:opacity-100 checked:focus:after:bg-icon-brand"
-                          />
-                          <div className="flex flex-col gap-y-[4px] text-text-primary">
-                            <div className="ri-label">{item.label}</div>
-                          </div>
-                        </label>
-                      ))}
-                    </fieldset>
-                  </div>
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel> เพศ</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                        className="flex space-x-4" // เพิ่ม space-x-4 เพื่อให้มีช่องว่างระหว่างตัวเลือก
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="male" />
+                          </FormControl>
+                          <FormLabel className="font-normal">ชาย</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="female" />
+                          </FormControl>
+                          <FormLabel className="font-normal">หญิง</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="other" />
+                          </FormControl>
+                          <FormLabel className="font-normal">ไม่ระบุ</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="flex w-full flex-col space-y-1 border-t border-t-border-primary pt-16 text-body-md-regular">
                 <div className="flex w-fit flex-col gap-y-[4px] rounded-xs p-[4px]">
                   <div className="flex items-baseline">
-                    <label className="relative flex cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="peer relative size-[16px] cursor-pointer appearance-none rounded-xs border border-border-primary transition-colors hover:bg-state-layer-primary-hovered focus:border-transparent focus:bg-state-layer-primary-focused disabled:cursor-not-allowed disabled:border-0 disabled:bg-state-layer-primary-disabled checked:border-none checked:bg-background-brand checked:hover:bg-background-brand checked:hover:outline checked:hover:outline-state-layer-primary-hovered checked:focus:border-solid checked:focus:border-border-brand checked:focus:bg-state-layer-brand-focused checked:disabled:border-none checked:disabled:bg-state-layer-primary-disabled checked:disabled:outline-none indeterminate:border-none indeterminate:bg-background-brand indeterminate:hover:bg-background-brand indeterminate:hover:outline indeterminate:hover:outline-state-layer-primary-hovered indeterminate:focus:border-solid indeterminate:focus:border-border-brand indeterminate:focus:bg-state-layer-brand-focused indeterminate:disabled:border-none indeterminate:disabled:bg-state-layer-primary-disabled indeterminate:disabled:outline-none flex flex-row"
-                      />
-                    </label>
-                    <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-checked:block text-icon-invert peer-checked:text-icon-invert peer-checked:opacity-100 peer-checked:peer-focus:text-icon-brand peer-checked:peer-disabled:text-icon-disabled">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[12px]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                      >
-                        <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
-                      </svg>
-                    </span>
-                    <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-indeterminate:block text-icon-invert peer-indeterminate:text-icon-invert peer-indeterminate:opacity-100 peer-indeterminate:peer-focus:text-icon-brand peer-indeterminate:peer-disabled:text-icon-disabled">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[12px]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                      >
-                        <rect
-                          x="3"
-                          y="9"
-                          width="14"
-                          height="2"
-                          rx="1"
-                          fill="currentColor"
-                        ></rect>
-                      </svg>
-                    </span>
-                    <label className="mur-checkbox-label cursor-pointer pl-[8px]  !text-text-error">
-                      <span className="mr-[8px]">
-                        <span className="w-full text-body-md-regular">
-                          ฉันได้อ่านและยอมรับ
-                          <span className="privacy text-text-link underline underline-offset-[3px]">
-                            ข้อกำหนดการใช้งาน
-                          </span>
-                          และ
-                          <span className="privacy text-text-link underline underline-offset-[3px]">
-                            นโยบายความเป็นส่วนตัว
-                          </span>
-                          ของสเวนเซ่นส์
-                        </span>
-                      </span>
-                    </label>
+                    <FormField
+                      control={form.control}
+                      name="acceptTerms"
+                      render={({ field }) => (
+                        <FormItem className="flex items-start space-x-2">
+                          <FormControl>
+                            <Checkbox
+                              id="acceptTerms"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormLabel htmlFor="acceptTerms">
+                            <span className="">
+                              ฉันได้อ่านและยอมรับ
+                              <a
+                                href="/terms"
+                                target="_blank"
+                                className="privacy text-text-link underline underline-offset-[3px]"
+                              >
+                                ข้อกำหนดการใช้งาน
+                              </a>
+                              และ
+                              <a
+                                href="/privacy-policy"
+                                target="_blank"
+                                className="privacy text-text-link underline underline-offset-[3px]"
+                              >
+                                นโยบายความเป็นส่วนตัว
+                              </a>
+                              ของสเวนเซ่นส์
+                            </span>
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
                 <div className="flex w-fit flex-col gap-y-[4px] rounded-xs p-[4px]">
                   <div className="flex items-baseline">
-                    <label className="relative flex cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="peer relative size-[16px] cursor-pointer appearance-none rounded-xs border border-border-primary transition-colors hover:bg-state-layer-primary-hovered focus:border-transparent focus:bg-state-layer-primary-focused disabled:cursor-not-allowed disabled:border-0 disabled:bg-state-layer-primary-disabled checked:border-none checked:bg-background-brand checked:hover:bg-background-brand checked:hover:outline checked:hover:outline-state-layer-primary-hovered checked:focus:border-solid checked:focus:border-border-brand checked:focus:bg-state-layer-brand-focused checked:disabled:border-none checked:disabled:bg-state-layer-primary-disabled checked:disabled:outline-none indeterminate:border-none indeterminate:bg-background-brand indeterminate:hover:bg-background-brand indeterminate:hover:outline indeterminate:hover:outline-state-layer-primary-hovered indeterminate:focus:border-solid indeterminate:focus:border-border-brand indeterminate:focus:bg-state-layer-brand-focused indeterminate:disabled:border-none indeterminate:disabled:bg-state-layer-primary-disabled indeterminate:disabled:outline-none flex flex-row"
-                      />
-                    </label>
-                    <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-checked:block text-icon-invert peer-checked:text-icon-invert peer-checked:opacity-100 peer-checked:peer-focus:text-icon-brand peer-checked:peer-disabled:text-icon-disabled">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[12px]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                      >
-                        <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
-                      </svg>
-                    </span>
-                    <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-indeterminate:block text-icon-invert peer-indeterminate:text-icon-invert peer-indeterminate:opacity-100 peer-indeterminate:peer-focus:text-icon-brand peer-indeterminate:peer-disabled:text-icon-disabled">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[12px]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                      >
-                        <rect
-                          x="3"
-                          y="9"
-                          width="14"
-                          height="2"
-                          rx="1"
-                          fill="currentColor"
-                        ></rect>
-                      </svg>
-                    </span>
-                    <label className="mur-checkbox-label cursor-pointer pl-[8px]  !text-text-error">
-                      <span className="mr-[8px]">
-                        <span className="w-full text-body-md-regular">
-                          ฉันยินยอมรับข้อมูลข่าวสาร กิจกรรมส่งเสริมการขายต่างๆ
-                          จากสเวนเซ่นส์และ
-                          <span className="privacy text-text-link underline underline-offset-[3px]">
-                            บริษัทในเครือ
-                          </span>
-                          โดยเราจะเก็บข้อมูลของท่านไว้เป็นความลับ
-                          สามารถศึกษาเงื่อนไขหรือข้อตกลง
-                          <span className="privacy text-text-link underline underline-offset-[3px]">
-                            นโยบายความเป็นส่วนตัว
-                          </span>
-                          เพิ่มเติมได้ที่เว็บไซต์ของบริษัทฯ
-                        </span>
-                      </span>
-                    </label>
+                    <FormField
+                      control={form.control}
+                      name="acceptMarketing"
+                      render={({ field }) => (
+                        <FormItem className="flex items-start space-x-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              id="acceptMarketing"
+                            />
+                          </FormControl>
+                          <FormLabel htmlFor="acceptMarketing">
+                            <span className="text-body-md-regular">
+                              ฉันยินยอมรับข้อมูลข่าวสาร
+                              กิจกรรมส่งเสริมการขายต่างๆ จากสเวนเซ่นส์และ
+                              <span className="privacy text-text-link underline underline-offset-[3px]">
+                                บริษัทในเครือ
+                              </span>
+                              โดยเราจะเก็บข้อมูลของท่านไว้เป็นความลับ
+                              สามารถศึกษาเงื่อนไขหรือข้อตกลง
+                              <span className="privacy text-text-link underline underline-offset-[3px]">
+                                นโยบายความเป็นส่วนตัว
+                              </span>
+                              เพิ่มเติมได้ที่เว็บไซต์ของบริษัทฯ
+                            </span>
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <button
               type="submit"
+              disabled={
+                !form.watch("acceptMarketing") || !form.watch("acceptTerms")
+              }
               className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] w-full"
             >
               <div className="flex items-center justify-center w-full">

@@ -24,12 +24,12 @@ export const AppHeader = () => {
   };
   useEffect(() => {
     // เรียกใช้ API เมื่อหน้าเว็บโหลด
-    fetch('/api/user')
-      .then((res)=>{
-        console.log(res)
+    fetch("/api/user")
+      .then((res) => {
+        console.log(res);
       })
       // .then((data) => setMessage(data.message))
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
