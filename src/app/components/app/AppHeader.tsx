@@ -4,14 +4,41 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import AppDialogLogin from "./AppDialogLgin";
+import { authClient } from "@/lib/auth-client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import AppLogoutBtn from "./AppLogoutBtn";
+import AppLogoutBtnM from "./AppLogoutBtnM";
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string | null | undefined;
+};
 
 export const AppHeader = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [dataUser, setDataUser] = useState<User | null>(null);
 
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: session } = await authClient.getSession();
+      if (session) {
+        setDataUser(session.user); // Or extract the specific section data if needed
+      }
+    };
+    fetchSession();
+  }, [router]);
 
   const handleClick = () => {
     if (pathname === "/") {
@@ -100,17 +127,36 @@ export const AppHeader = () => {
                   </div>
                 )}
               <div className="py-4">
-                <button
-                  className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4"
-                  type="button"
-                  onClick={handleClick}
-                >
-                  <div className="flex items-center justify-center w-full">
-                    <div className="flex items-center justify-center">
-                      เข้าสู่ระบบ / ลงทะเบียน
-                    </div>
-                  </div>
-                </button>
+                <div className="flex items-center justify-center">
+                  {dataUser ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4">
+                        <div className="flex items-center justify-center w-full">
+                          <div className="flex items-center justify-center">
+                            สวัสดี {dataUser.name}
+                          </div>
+                        </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>
+                          <AppLogoutBtn />
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <button
+                      className="relative max-w-full cursor-pointer space-x-[8px] font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-[16px] py-[12px] text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-8 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-12 md:text-title-md-medium md:!leading-[22px] shrink-0 pt-4"
+                      type="button"
+                      onClick={handleClick}
+                    >
+                      <div className="flex items-center justify-center w-full">
+                        <div className="flex items-center justify-center">
+                          เข้าสู่ระบบ / ลงทะเบียน
+                        </div>
+                      </div>
+                    </button>
+                  )}
+                </div>
               </div>
               {isCartOpen && (
                 <div
@@ -269,20 +315,26 @@ export const AppHeader = () => {
                         </div>
                       </a>
                     </div>
-                    <a
-                      href="/login"
-                      className="relative max-w-full cursor-pointer space-x-2 font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-4 py-3 text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-2 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-3 md:text-title-md-medium md:!leading-[22px] flex items-center"
-                    >
-                      <button className="w-full flex items-center justify-center gap-2">
-                        <Image
-                          src="/images/person.svg"
-                          alt="login or register"
-                          width={16}
-                          height={16}
-                        />
-                        <span>เข้าสู่ระบบ / ลงทะเบียน</span>
-                      </button>
-                    </a>
+                    {dataUser ? (
+                      <AppLogoutBtnM />
+                    ) : (
+                      <>
+                        <a
+                          href="/login"
+                          className="relative max-w-full cursor-pointer space-x-2 font-semibold disabled:cursor-not-allowed disabled:fill-text-disabled disabled:text-text-disabled rounded-button-md min-h-[48px] px-4 py-3 text-title-lg-medium border-none bg-background-brand fill-text-invert text-text-invert hover:bg-state-layer-brand-hovered focus:border-border-brand focus:bg-state-layer-brand-focused focus:fill-text-brand focus:text-text-brand disabled:bg-state-layer-primary-disabled gap-x-2 h-[40px] text-title-md-medium !leading-[22px] md:h-[48px] md:py-3 md:text-title-md-medium md:!leading-[22px] flex items-center"
+                        >
+                          <button className="w-full flex items-center justify-center gap-2">
+                            <Image
+                              src="/images/person.svg"
+                              alt="login or register"
+                              width={16}
+                              height={16}
+                            />
+                            <span>เข้าสู่ระบบ / ลงทะเบียน</span>
+                          </button>
+                        </a>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
