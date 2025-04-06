@@ -1,11 +1,74 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterForm() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    birthDate: "",
+    phone: "",
+    gender: "",
+  });
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  // const [gender, setGender] = useState("");
+  // console.log(gender);
 
   const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevState) => !prevState);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setIsPasswordVisible((prevState: any) => !prevState);
+  };
+
+  const router = useRouter();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSignUp = async () => {
+    await authClient.signUp.email(
+      {
+        email: formData.email,
+        password: formData.password,
+        name: `${formData.firstName} ${formData.lastName}`,
+      },
+      {
+        onRequest: (ctx) => console.log("loading", ctx.body),
+        onSuccess: async (ctx) => {
+          // Make this async
+          console.log("success", ctx.data);
+          alert("สมัครสำเร็จ");
+          console.log(ctx.data.user.id);
+
+          try {
+            const response = await fetch("/api/user", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: ctx.data.user.id,
+                birthDate: formData.birthDate,
+                gender: formData.gender,
+                phone: formData.phone,
+              }),
+            });
+
+            const data = await response.json();
+            console.log(data); // You can log or handle the response here
+          } catch (error) {
+            console.error("Error submitting form:", error);
+          }
+          return;
+          router.replace("/login");
+        },
+        onError: (ctx) => alert(ctx.error.message),
+      }
+    );
   };
 
   return (
@@ -14,7 +77,13 @@ export default function RegisterForm() {
         สมัครสมาชิกฟรี! รับสิทธิประโยชน์และส่วนลดมากมาย
       </p>
       <div className="flex w-full flex-col">
-        <form className="flex flex-col space-y-2">
+        <form
+          className="flex flex-col space-y-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSignUp();
+          }}
+        >
           <div className="flex flex-col gap-[8px]">
             <label className="mur-form-label flex gap-[8px] text-label-medium text-text-primary">
               ชื่อ
@@ -23,8 +92,11 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type="text"
+                name="firstName"
                 placeholder="ชื่อ"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.firstName}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -36,8 +108,11 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type="text"
+                name="lastName"
                 placeholder="นามสกุล"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.lastName}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -49,8 +124,11 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type="email"
+                name="email"
                 placeholder="อีเมล"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -62,8 +140,11 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type={isPasswordVisible ? "text" : "password"}
+                name="password"
                 placeholder="รหัสผ่าน"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.password}
+                onChange={handleChange}
               />
               <svg
                 onClick={togglePasswordVisibility}
@@ -91,7 +172,10 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type="date"
+                name="birthDate"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.birthDate}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -103,8 +187,11 @@ export default function RegisterForm() {
             <div className="mur-input-wrapper flex w-full">
               <input
                 type="number"
+                name="phone"
                 placeholder="เบอร์โทรศัพท์"
                 className="h-[42px] w-full grow rounded-sm border bg-state-layer-primary-default py-[8px] text-body-md-regular placeholder:text-text-secondary focus:outline-border-primary hover:bg-state-layer-primary-hovered disabled:cursor-not-allowed disabled:border-border-line disabled:bg-state-layer-primary-disabled disabled:placeholder:text-text-disabled focus:border-transparent focus:shadow-input-outline-primary-sm border-border-line hover:border-border-primary px-[16px]"
+                value={formData.phone}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -130,6 +217,8 @@ export default function RegisterForm() {
                           type="radio"
                           name="gender"
                           value={item.value}
+                          checked={formData.gender === item.value}
+                          onChange={handleChange}
                           className="relative size-[16px] cursor-pointer appearance-none rounded-full border border-border-primary hover:bg-state-layer-primary-focused focus:border-none focus:bg-state-layer-primary-focused disabled:cursor-not-allowed disabled:border-none disabled:bg-state-layer-primary-disabled before:content[''] before:absolute before:left-1/2 before:top-1/2 before:size-full before:-translate-y-1/2 before:block before:-translate-x-1/2 before:rounded-full before:opacity-0 before:transition-opacity hover:before:[box-shadow:0px_0px_0px_2px_rgba(234,236,240,1)] focus:before:bg-state-layer-primary-focused hover:before:bg-state-layer-brand-hover hover:before:shadow-3xl checked:!border-none checked:hover:checked:bg-transparent checked:focus:bg-transparent checked:before:bg-background-brand checked:before:opacity-100 checked:focus:before:border checked:focus:before:border-border-brand checked:focus:before:bg-state-layer-brand-focused checked:disabled:before:bg-state-layer-primary-disabled after:content[''] after:absolute after:left-1/2 after:top-1/2 after:size-[6px] after:-translate-y-1/2 after:block after:-translate-x-1/2 after:rounded-full after:opacity-0 after:transition-opacity disabled:after:bg-icon-secondary checked:after:bg-icon-invert checked:after:opacity-100 checked:focus:after:bg-icon-brand"
                         />
                         <div className="flex flex-col gap-y-[4px] text-text-primary">
@@ -158,9 +247,7 @@ export default function RegisterForm() {
                       fill="currentColor"
                       stroke="currentColor"
                     >
-                      <path
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      ></path>
+                      <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
                     </svg>
                   </span>
                   <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-indeterminate:block text-icon-invert peer-indeterminate:text-icon-invert peer-indeterminate:opacity-100 peer-indeterminate:peer-focus:text-icon-brand peer-indeterminate:peer-disabled:text-icon-disabled">
@@ -214,9 +301,7 @@ export default function RegisterForm() {
                       fill="currentColor"
                       stroke="currentColor"
                     >
-                      <path
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      ></path>
+                      <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
                     </svg>
                   </span>
                   <span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity peer-indeterminate:block text-icon-invert peer-indeterminate:text-icon-invert peer-indeterminate:opacity-100 peer-indeterminate:peer-focus:text-icon-brand peer-indeterminate:peer-disabled:text-icon-disabled">

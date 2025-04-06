@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import AppDialogLogin from "./AppDialogLgin";
@@ -22,7 +22,15 @@ export const AppHeader = () => {
       router.push("/login");
     }
   };
-
+  useEffect(() => {
+    // เรียกใช้ API เมื่อหน้าเว็บโหลด
+    fetch('/api/user')
+      .then((res)=>{
+        console.log(res)
+      })
+      // .then((data) => setMessage(data.message))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
   };
