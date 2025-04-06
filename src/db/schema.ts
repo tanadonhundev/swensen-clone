@@ -4,6 +4,10 @@ import {
   text,
   timestamp,
   boolean,
+  mysqlEnum,
+  int,
+  decimal,
+  primaryKey,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -17,7 +21,7 @@ export const user = mysqlTable("user", {
   image: text("image"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  role: text("role"),
+  role: mysqlEnum(["user", "admin"]).default("user"),
 });
 
 export const session = mysqlTable("session", {
@@ -59,3 +63,32 @@ export const verification = mysqlTable("verification", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+// ProductCategory Table
+export const ProductCategory = mysqlTable(
+  "product_category",
+  {
+    id: int().autoincrement().notNull(),
+    category_name: varchar("category_name", { length: 100 }).notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+  },
+  (table) => [primaryKey({ columns: [table.id], name: "category_id" })]
+);
+
+// ProductItem Table
+export const ProductItem = mysqlTable(
+  "product_item",
+  {
+    id: int().autoincrement().notNull(),
+    categoryId: int("category_id")
+      .notNull()
+      .references(() => ProductCategory.id),
+    description: text("description"),
+    price: decimal({ precision: 10, scale: 2 }).notNull(),
+    imageName: text("image_name").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+  },
+  (table) => [primaryKey({ columns: [table.id], name: "product_id" })]
+);
