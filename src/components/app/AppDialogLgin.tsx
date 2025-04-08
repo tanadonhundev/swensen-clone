@@ -2,13 +2,16 @@
 import LoginForm from "./LoginForm";
 
 type LoginFormProps = {
-  setShowLogin: (value: boolean) => void; // รับ prop สำหรับการตั้งค่า state ของ AppHeader
+  setShowLogin: (value: boolean) => void;
 };
 
 export default function AppDialogLogin({ setShowLogin }: LoginFormProps) {
-
   const closeLoginForm = () => {
     setShowLogin(false);
+  };
+
+  const handleLoginSuccess = () => {
+    closeLoginForm();
   };
 
   return (
@@ -18,24 +21,14 @@ export default function AppDialogLogin({ setShowLogin }: LoginFormProps) {
           className="absolute right-16 top-16 flex size-[40px] items-center justify-center"
           onClick={closeLoginForm}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="fill-icon-primary"
-          >
+          <svg width="24" height="24">
             <g id="close">
-              <path
-                id="Vector"
-                d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
-              ></path>
+              <path d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"></path>
             </g>
           </svg>
         </button>
         <div className="space-y-16">
-          <LoginForm />
+          <LoginForm onLoginSuccess={handleLoginSuccess} />
         </div>
       </section>
     </div>
