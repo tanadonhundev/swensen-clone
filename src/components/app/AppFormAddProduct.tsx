@@ -45,6 +45,8 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      price: "",
+      categoryId: "0",
     },
     mode: "onSubmit",
   });
@@ -54,8 +56,36 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
   }, [form]);
 
   const handleOnSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    try {
+      const newProduct = {
+        title: data.title,
+        price: parseFloat(data.price),
+        imageName: "test.jpg",
+        categoryId: data.categoryId,
+      };
+
+      const response = await fetch("/api/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      });
+
+      if (response.ok) {
+        alert("บันทึกข้อมูลสำเร็จ");
+        form.reset();
+      } else {
+        const error = await response.json();
+        console.log(error);
+        alert("บันทึกข้อมูลไม่สำเร็จ");
+        console.error("Error adding product:", error);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
   };
+
   return (
     <>
       <Card className="w-[1000px]">
@@ -127,25 +157,6 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
                       </FormItem>
                     )}
                   />
-                  {/* <Label htmlFor="framework">หมวดหมู่</Label>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      {category.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                        >
-                          {category.category_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select> */}
                 </div>
               </div>
               <Button variant="outline" type="submit">

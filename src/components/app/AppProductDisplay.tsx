@@ -10,7 +10,7 @@ type Product = {
     createdAt: Date | null;
     updatedAt: Date | null;
     categoryId: number;
-    description: string | null;
+    title: string | null;
     price: string;
     imageName: string;
   }[];
@@ -29,7 +29,7 @@ const AppProductDisplay = ({ products }: ProductListProps) => {
             <h3 className="text-lg font-bold mb-2">{product.category_name}</h3>
             {product.productItems.map((item) => (
               <div key={item.id} className="border-t py-2">
-                <div>📦 {item.description}</div>
+                <div>📦 {item.title}</div>
                 <div>💰 {item.price} บาท</div>
                 <div>🖼️ {item.imageName}</div>
               </div>

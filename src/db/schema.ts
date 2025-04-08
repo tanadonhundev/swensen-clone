@@ -7,7 +7,6 @@ import {
   mysqlEnum,
   int,
   decimal,
-  primaryKey,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -65,30 +64,22 @@ export const verification = mysqlTable("verification", {
 });
 
 // ProductCategory Table
-export const productcategory = mysqlTable(
-  "product_category",
-  {
-    id: int().autoincrement().notNull(),
-    category_name: varchar("category_name", { length: 100 }).notNull(),
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
-  },
-  (table) => [primaryKey({ columns: [table.id], name: "category_id" })]
-);
+export const productcategory = mysqlTable("product_category", {
+  id: int().autoincrement().notNull().primaryKey(),
+  category_name: varchar("category_name", { length: 100 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+});
 
 // ProductItem Table
-export const productitem = mysqlTable(
-  "product_item",
-  {
-    id: int().autoincrement().notNull(),
-    categoryId: int("category_id")
-      .notNull()
-      .references(() => productcategory.id),
-    description: text("description"),
-    price: decimal({ precision: 10, scale: 2 }).notNull(),
-    imageName: text("image_name").notNull(),
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
-  },
-  (table) => [primaryKey({ columns: [table.id], name: "product_id" })]
-);
+export const productitem = mysqlTable("product_item", {
+  id: int().autoincrement().notNull().primaryKey(),
+  categoryId: int("category_id")
+    .notNull()
+    .references(() => productcategory.id),
+  title: text("title"),
+  price: decimal({ precision: 10, scale: 2 }).notNull(),
+  imageName: text("image_name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+});
