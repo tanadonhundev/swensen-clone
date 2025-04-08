@@ -42,51 +42,43 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
   }, [form]);
 
   const handleOnSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      // Start the sign-in request
-      await authClient.signIn.email(
-        {
-          email: data.email,
-          password: data.password,
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onRequest: (ctx) => {
+          console.log("Loading:", ctx.body);
         },
-        {
-          onRequest: (ctx) => {
-            console.log("Loading:", ctx.body); // Log request body for debugging
-          },
-          onSuccess: async (ctx) => {
-            console.log("Success:", ctx.data); // Log response data for debugging
+        onSuccess: async (ctx) => {
+          console.log("Success:", ctx.data);
 
-            // Get session data (client-side)
-            const { data: session } = await authClient.getSession();
+          // Get session data (client-side)
+          const { data: session } = await authClient.getSession();
 
-            if (session?.user) {
-              if (session.user.role === "admin") {
-                router.replace("/product"); // Redirect to product page for admin
-              } else if (session.user.role === "user") {
-                router.replace("/"); // Redirect to home page for user
-              } else {
-                console.error("Unknown role:", session.user.role); // Handle unknown roles
-              }
-
-              // Optionally: Add other actions on success, like storing session data
-              alert("เข้าสู่ระบบสำเร็จ");
-              onLoginSuccess(); // Close the login form or trigger relevant action
+          if (session?.user) {
+            if (session.user.role === "admin") {
+              router.replace("/product"); // Redirect to product page for admin
+            } else if (session.user.role === "user") {
+              router.replace("/"); // Redirect to home page for user
             } else {
-              console.error("Session data is missing"); // Handle missing session
-              alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+              console.error("Unknown role:", session.user.role);
             }
-          },
-          onError: (ctx) => {
-            console.error("Error:", ctx.error.message); // Log detailed error
-            alert(`เข้าสู่ระบบล้มเหลว: ${ctx.error.message}`); // Display error to user
-          },
-        }
-      );
-    } catch (error) {
-      // Log any unexpected errors
-      console.error("Unexpected error during sign-in:", error);
-      alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
-    }
+
+            alert("เข้าสู่ระบบสำเร็จ");
+            onLoginSuccess();
+          } else {
+            console.error("Session data is missing");
+            alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+          }
+        },
+        onError: (ctx) => {
+          console.error("Error:", ctx.error.message);
+          alert(`เข้าสู่ระบบล้มเหลว: ${ctx.error.message}`);
+        },
+      }
+    );
   };
 
   return (

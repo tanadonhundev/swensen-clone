@@ -14,3 +14,14 @@ export async function getProductService() {
     },
   });
 }
+
+export async function getProductCategoryService() {
+  // select * from product
+  return await db.query.productcategory.findMany({
+    orderBy: desc(productcategory.id),
+    columns: {
+      id: true,
+      category_name: true,
+    },
+  });
+}
