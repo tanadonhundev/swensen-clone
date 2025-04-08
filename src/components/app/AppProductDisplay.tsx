@@ -1,10 +1,20 @@
 "use client";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Card, CardHeader, CardTitle } from "../ui/card";
+import { Trash2 } from "lucide-react";
 
 type Product = {
   id: number;
+  category_name: string;
   createdAt: Date | null;
   updatedAt: Date | null;
-  category_name: string;
   productItems: {
     id: number;
     createdAt: Date | null;
@@ -22,22 +32,41 @@ type ProductListProps = {
 
 const AppProductDisplay = ({ products }: ProductListProps) => {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {products.map((product) => (
-          <div key={product.id} className="bg-white p-4 rounded-xl shadow">
-            <h3 className="text-lg font-bold mb-2">{product.category_name}</h3>
-            {product.productItems.map((item) => (
-              <div key={item.id} className="border-t py-2">
-                <div>📦 {item.title}</div>
-                <div>💰 {item.price} บาท</div>
-                <div>🖼️ {item.imageName}</div>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </>
+    <Card className="w-[1000px] bg-white">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-2xl">รายการสินค้า</CardTitle>
+      </CardHeader>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-center">หมวดหมู่</TableHead>
+            <TableHead className="text-center">ชื่อสินค้า</TableHead>
+            <TableHead className="text-center">ราคา</TableHead>
+            <TableHead className="text-center">รูปภาพ</TableHead>
+            <TableHead className="text-center">จัดการ</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {products.flatMap((product) =>
+            product.productItems.map((item) => (
+              <TableRow key={item.id} className="border-b">
+                <TableCell className="text-center">
+                  {product.category_name}
+                </TableCell>
+                <TableCell className="text-center">{item.title}</TableCell>
+                <TableCell className="text-center">{item.price}</TableCell>
+                <TableCell className="text-center">{item.imageName}</TableCell>
+                <TableCell className="text-center">
+                  <button>
+                    <Trash2 className="text-red-500" />
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </Card>
   );
 };
 

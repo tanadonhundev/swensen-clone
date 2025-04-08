@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import Link from "next/link";
 
 type Category = {
   id: number;
@@ -46,7 +47,7 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
     defaultValues: {
       title: "",
       price: "",
-      categoryId: "0",
+      categoryId: "",
     },
     mode: "onSubmit",
   });
@@ -89,9 +90,13 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
   return (
     <>
       <Card className="w-[1000px]">
-        <CardHeader>
-          <CardTitle>เพื่มสินค้า</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl">เพิ่มสินค้า</CardTitle>
+          <Link href={"/category"}>
+            <Button className="bg-blue-500 text-white">จัดการหมวดหมู่</Button>
+          </Link>
         </CardHeader>
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleOnSubmit)}>
@@ -139,18 +144,22 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a verified email to display" />
+                              <SelectValue placeholder="เลือกหมวดหมู่" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {category.map((category) => (
-                              <SelectItem
-                                key={category.id}
-                                value={category.id.toString()}
-                              >
-                                {category.category_name}
-                              </SelectItem>
-                            ))}
+                            {category.length > 0 ? (
+                              category.map((category) => (
+                                <SelectItem
+                                  key={category.id}
+                                  value={category.id.toString()}
+                                >
+                                  {category.category_name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <div>ไม่มีข้อมูลในระบบ</div>
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -159,7 +168,7 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
                   />
                 </div>
               </div>
-              <Button variant="outline" type="submit">
+              <Button type="submit" className="bg-red-500 w-full mt-5">
                 บันทึก
               </Button>
             </form>

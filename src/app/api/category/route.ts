@@ -1,5 +1,5 @@
 import conn from "@/db";
-import { productitem } from "@/db/schema";
+import { productcategory } from "@/db/schema";
 
 const db = await conn;
 
@@ -8,11 +8,8 @@ export async function POST(req: Request) {
     // ดึงข้อมูล JSON จาก request
     const items = await req.json();
 
-    await db.insert(productitem).values({
-      categoryId: items.categoryId,
-      title: items.title,
-      price: items.price.toString(),
-      imageName: items.imageName,
+    await db.insert(productcategory).values({
+      category_name: items.title,
     });
 
     return new Response(
@@ -22,7 +19,7 @@ export async function POST(req: Request) {
       }
     );
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return new Response(
       JSON.stringify({ error: "เกิดข้อผิดพลาดในการรับข้อมูล" }),
       {
