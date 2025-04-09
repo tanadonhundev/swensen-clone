@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Category = {
   id: number;
@@ -42,6 +43,7 @@ const formSchema = z.object({
 });
 
 export default function AppFormAddProduct({ category }: ProductListCategory) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,6 +77,7 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
 
       if (response.ok) {
         alert("บันทึกข้อมูลสำเร็จ");
+        router.refresh();
         form.reset();
       } else {
         const error = await response.json();

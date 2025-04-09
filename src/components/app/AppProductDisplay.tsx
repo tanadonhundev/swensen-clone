@@ -9,6 +9,7 @@ import {
 } from "../ui/table";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: number;
@@ -31,6 +32,24 @@ type ProductListProps = {
 };
 
 const AppProductDisplay = ({ products }: ProductListProps) => {
+  const route = useRouter();
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`/api/product/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        alert("ลบข้อมูลสำเร็จ");
+        route.refresh();
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
+
   return (
     <Card className="w-full max-w-[1440px]">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -57,7 +76,7 @@ const AppProductDisplay = ({ products }: ProductListProps) => {
                 <TableCell className="text-center">{item.price}</TableCell>
                 <TableCell className="text-center">{item.imageName}</TableCell>
                 <TableCell className="text-center">
-                  <button>
+                  <button onClick={() => handleDelete(item.id)}>
                     <Trash2 className="text-red-500" />
                   </button>
                 </TableCell>

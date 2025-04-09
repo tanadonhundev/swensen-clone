@@ -16,12 +16,14 @@ import {
   FormMessage,
 } from "../ui/form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "ต้องมีอย่างน้อย 1 ตัว" }).trim(),
 });
 
 export default function AppFormAddCategory() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +52,7 @@ export default function AppFormAddCategory() {
 
       if (response.ok) {
         alert("บันทึกข้อมูลสำเร็จ");
+        router.refresh()
         form.reset();
       } else {
         const error = await response.json();

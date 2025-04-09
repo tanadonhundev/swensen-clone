@@ -9,6 +9,7 @@ import {
 } from "../ui/table";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Category = {
   id: number;
@@ -20,6 +21,7 @@ type categoryListProps = {
 };
 
 const AppCategoryDisplay = ({ category }: categoryListProps) => {
+  const route = useRouter();
   const handleDelete = async (id: number) => {
     try {
       const response = await fetch(`/api/category/${id}`, {
@@ -28,9 +30,9 @@ const AppCategoryDisplay = ({ category }: categoryListProps) => {
           "Content-Type": "application/json",
         },
       });
-
       if (response.ok) {
         alert("ลบข้อมูลสำเร็จ");
+        route.refresh();
       }
     } catch (error) {
       console.error("Unexpected error:", error);
