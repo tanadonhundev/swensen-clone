@@ -1,6 +1,6 @@
 import "server-only";
 import conn from "@/db";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { productcategory } from "@/db/schema";
 
 const db = await conn;
@@ -25,3 +25,16 @@ export async function getProductCategoryService() {
     },
   });
 }
+
+export async function remove(id: number) {
+  return await db.delete(productcategory).where(eq(productcategory.id, id));
+}
+
+// export async function getProductByIdService(id: number) {
+//   return await db.query.product.findMany({
+//     where: eq(product.id, id),
+//     with: {
+//       productImages: true,
+//     },
+//   });
+// }

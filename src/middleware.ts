@@ -27,5 +27,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // อย่าลืมป้องกัน api ด้วย
   // matcher: ["api/product","/dashboard","/contact","about"], // Apply middleware to specific routes
-  matcher: ["/product/:path*"], //ป้องกัน route ทุก route ที่อยู่ภายใต้ dashboard
+  // matcher: ["/product/:path*"], //ป้องกัน route ทุก route ที่อยู่ภายใต้ dproduct
+  matcher: ["/product/:path*", "/category"],
 };

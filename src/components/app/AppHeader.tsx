@@ -49,15 +49,15 @@ export const AppHeader = () => {
       router.push("/login");
     }
   };
-  useEffect(() => {
-    // เรียกใช้ API เมื่อหน้าเว็บโหลด
-    fetch("/api/user")
-      .then((res) => {
-        console.log(res);
-      })
-      // .then((data) => setMessage(data.message))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  // useEffect(() => {
+  //   // เรียกใช้ API เมื่อหน้าเว็บโหลด
+  //   fetch("/api/user")
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     // .then((data) => setMessage(data.message))
+  //     .catch((error) => console.error("Error fetching data:", error));
+  // }, [router]);
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
   };

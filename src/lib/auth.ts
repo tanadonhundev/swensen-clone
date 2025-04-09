@@ -29,10 +29,10 @@ export const auth = betterAuth({
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
     },
   },
-  session: {
-    expiresIn: 60 * 30, // ✅ 30 นาที
-    updateAge: 60 * 5, // ✅ อัปเดตทุก 5 นาที
-  },
+  // session: {
+  //   expiresIn: 60 * 30, // ✅ 30 นาที
+  //   updateAge: 60 * 5, // ✅ อัปเดตทุก 5 นาที
+  // },
   advanced: {
     cookiePrefix: "thana-app",
   },

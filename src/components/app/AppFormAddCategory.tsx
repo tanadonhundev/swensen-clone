@@ -64,7 +64,7 @@ export default function AppFormAddCategory() {
 
   return (
     <>
-      <Card className="w-[1000px]">
+      <Card className="w-full max-w-[1440px]">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl">เพิ่มหมวดหมู่</CardTitle>
           <Link href={"/product"}>

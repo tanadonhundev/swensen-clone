@@ -76,7 +76,10 @@ export const productitem = mysqlTable("product_item", {
   id: int().autoincrement().notNull().primaryKey(),
   categoryId: int("category_id")
     .notNull()
-    .references(() => productcategory.id),
+    .references(() => productcategory.id, {
+      onDelete: "cascade",
+    }),
+
   title: text("title"),
   price: decimal({ precision: 10, scale: 2 }).notNull(),
   imageName: text("image_name").notNull(),

@@ -32,7 +32,7 @@ type ProductListProps = {
 
 const AppProductDisplay = ({ products }: ProductListProps) => {
   return (
-    <Card className="w-[1000px] bg-white">
+    <Card className="w-full max-w-[1440px]">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-2xl">รายการสินค้า</CardTitle>
       </CardHeader>
