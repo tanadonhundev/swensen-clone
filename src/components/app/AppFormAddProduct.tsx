@@ -24,6 +24,7 @@ import {
 } from "../ui/form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type Category = {
   id: number;
@@ -40,6 +41,7 @@ const formSchema = z.object({
   categoryId: z.string({
     required_error: "กรุณาเลือกหหมวดหมู่",
   }),
+  file: z.any(),
 });
 
 export default function AppFormAddProduct({ category }: ProductListCategory) {
@@ -50,6 +52,7 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
       title: "",
       price: "",
       categoryId: "",
+      file: null,
     },
     mode: "onSubmit",
   });
@@ -59,34 +62,38 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
   }, [form]);
 
   const handleOnSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      const newProduct = {
-        title: data.title,
-        price: parseFloat(data.price),
-        imageName: "test.jpg",
-        categoryId: data.categoryId,
-      };
+    const formData = new FormData();
 
-      const response = await fetch("/api/product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
+    formData.append("title", data.title);
+    formData.append("price", data.price); // เป็น string อยู่แล้ว
+    formData.append("categoryId", data.categoryId);
+
+    // console.log(data.file)
+    // return
+
+    // ตรวจสอบว่ามีไฟล์ไหม แล้วค่อย append
+    if (data.file) {
+      formData.append("file", data.file);
+    }
+    console.log(formData);
+    const response = await axios.post("/api/product", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response.status === 201) {
+      alert("บันทึกข้อมูลสำเร็จ");
+      form.reset({
+        title: "",
+        price: "",
+        categoryId: "",
+        file: null, // ถ้าใช้ไฟล์
       });
-
-      if (response.ok) {
-        alert("บันทึกข้อมูลสำเร็จ");
-        router.refresh();
-        form.reset();
-      } else {
-        const error = await response.json();
-        console.log(error);
-        alert("บันทึกข้อมูลไม่สำเร็จ");
-        console.error("Error adding product:", error);
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+      router.refresh?.();
+    } else {
+      console.error("Error:", response.data);
+      alert("บันทึกข้อมูลไม่สำเร็จ");
     }
   };
 
@@ -165,6 +172,26 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
                             )}
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <FormField
+                    control={form.control}
+                    name="file"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Upload File</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            onChange={(e) =>
+                              field.onChange(e.target.files?.[0])
+                            }
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
