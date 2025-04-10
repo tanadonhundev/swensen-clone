@@ -101,6 +101,8 @@ export const AppHeader = () => {
               )}
               {pathname !== "/login" &&
                 pathname !== "/register" &&
+                pathname !== "/product" &&
+                pathname !== "/category" &&
                 !isCartOpen && (
                   <div
                     className="fixed right-0 top-1/2 z-20 hidden h-fit -translate-y-1/2 lg:flex items-center justify-center"
