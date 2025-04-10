@@ -62,7 +62,7 @@ export default function MenuCardList({ menuItems }: MenuCardProps) {
 
   return (
     <>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 ">
         {menuItems.map((item, index) => (
           <div className="flex items-center px-8 py-12 w-fit !p-0" key={index}>
             <button

@@ -124,11 +124,7 @@ export default async function AppContent() {
           <div className="flex items-center justify-between ">
             <p className="text-4xl">เมนูจัดส่ง</p>
           </div>
-          <div className="flex w-full flex-col items-center gap-44">
-            <div className="flex w-full items-center gap-16  sm:flex-wrap pb-4 sm:pb-0 !px-0 gap-x-[12px]">
-              <MenuCardList menuItems={category} />
-            </div>
-          </div>
+          <MenuCardList menuItems={category} />
         </section>
       </section>
     </main>
