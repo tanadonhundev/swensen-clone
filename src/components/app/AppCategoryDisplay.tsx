@@ -10,6 +10,7 @@ import {
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type Category = {
   id: number;
@@ -24,13 +25,13 @@ const AppCategoryDisplay = ({ category }: categoryListProps) => {
   const route = useRouter();
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/category/${id}`, {
-        method: "DELETE",
+      const response = await axios.delete(`/api/category/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      if (response.ok) {
+      console.log(response);
+      if (response.status === 200) {
         alert("ลบข้อมูลสำเร็จ");
         route.refresh();
       }

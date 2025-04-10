@@ -65,17 +65,13 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
     const formData = new FormData();
 
     formData.append("title", data.title);
-    formData.append("price", data.price); // เป็น string อยู่แล้ว
+    formData.append("price", data.price);
     formData.append("categoryId", data.categoryId);
 
-    // console.log(data.file)
-    // return
-
-    // ตรวจสอบว่ามีไฟล์ไหม แล้วค่อย append
     if (data.file) {
       formData.append("file", data.file);
     }
-    console.log(formData);
+
     const response = await axios.post("/api/product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -84,12 +80,6 @@ export default function AppFormAddProduct({ category }: ProductListCategory) {
 
     if (response.status === 201) {
       alert("บันทึกข้อมูลสำเร็จ");
-      form.reset({
-        title: "",
-        price: "",
-        categoryId: "",
-        file: null, // ถ้าใช้ไฟล์
-      });
       router.refresh?.();
     } else {
       console.error("Error:", response.data);
