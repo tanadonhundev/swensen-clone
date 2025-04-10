@@ -119,7 +119,7 @@ export default function PromotionCard({
               <span>ใส่ตะกร้า&nbsp;</span>
               <div className="flex space-x-8">
                 <span className="inline-block shrink-0 whitespace-nowrap first-letter:mr-1">
-                  ฿ {699 * selectedQty}
+                  ฿ {Number(price) * selectedQty}
                 </span>
               </div>
             </button>

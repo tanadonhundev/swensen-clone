@@ -49,3 +49,31 @@ export async function DELETE(
     );
   }
 }
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = parseInt(params.id);
+    const db = await conn;
+    // ค้นหาข้อมูลสินค้าก่อนเพื่อดึงชื่อไฟล์
+    const product = await db
+      .select()
+      .from(productitem)
+      .where(eq(productitem.categoryId, id))
+      .execute();
+    if (product.length === 0) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    return NextResponse.json({
+      product,
+    });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

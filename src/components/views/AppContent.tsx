@@ -1,6 +1,7 @@
 import Image from "next/image";
-import PromotionCard from "../ui/PromotionCard";
 import MenuCardList from "../ui/MenuCardList";
+import { getProductCategoryService } from "@/services/product";
+import PromotionCard from "../ui/PromotionCard";
 
 const promotions = [
   {
@@ -35,7 +36,8 @@ const promotions = [
   },
 ];
 
-export default function AppContent() {
+export default async function AppContent() {
+  const category = await getProductCategoryService();
   return (
     <main>
       <section className="h-max w-full md:min-h-[calc(100vh-110px-88px)]">
@@ -123,35 +125,8 @@ export default function AppContent() {
             <p className="text-4xl">เมนูจัดส่ง</p>
           </div>
           <div className="flex w-full flex-col items-center gap-44">
-            <div className="flex w-full items-center gap-16 overflow-y-auto overflow-auto sm:flex-wrap pb-4 sm:pb-0 !px-0 gap-x-[12px]">
-              <MenuCardList
-                menuItems={[
-                  "ไอศกรีมเค้ก",
-                  "ไอศกรีมควอท (450g)",
-                  "ไอศกรีมมินิ ควอท (250g)",
-                  "ซันเด เซต",
-                  "ไอศกรีมสกู๊ป",
-                  "ไอศกรีมสมอลไบทส์",
-                  "ท็อปปิ้ง",
-                ]}
-              />
-            </div>
-            {/* taps card */}
-            <div className="flex flex-col gap-24">
-              <div className="flex w-full flex-col items-center gap-44">
-                <div className="w-full">
-                  <div className="grid h-fit w-full grid-cols-2 gap-32 md:grid-cols-3 lg:grid-cols-4">
-                    {promotions.map((promo, index) => (
-                      <PromotionCard
-                        key={index}
-                        imageUrl={promo.imageUrl}
-                        title={promo.title}
-                        price={promo.price}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="flex w-full items-center gap-16  sm:flex-wrap pb-4 sm:pb-0 !px-0 gap-x-[12px]">
+              <MenuCardList menuItems={category} />
             </div>
           </div>
         </section>
