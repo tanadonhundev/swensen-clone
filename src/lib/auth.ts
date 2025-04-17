@@ -23,12 +23,12 @@ export const auth = betterAuth({
     minPasswordLength: 4,
     // sendVerificationEmail: true,
   },
-  socialProviders: {
-    facebook: {
-      clientId: process.env.FACEBOOK_CLIENT_ID as string,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-    },
-  },
+  // socialProviders: {
+  //   facebook: {
+  //     clientId: process.env.FACEBOOK_CLIENT_ID as string,
+  //     clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+  //   },
+  // },
   // session: {
   //   expiresIn: 60 * 30, // ✅ 30 นาที
   //   updateAge: 60 * 5, // ✅ อัปเดตทุก 5 นาที
