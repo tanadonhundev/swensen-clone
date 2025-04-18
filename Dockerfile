@@ -1,5 +1,5 @@
-# ใช้ Node.js 22 เป็น base image
-FROM node:22
+# ใช้ Node.js 18 เป็น base image
+FROM node:18
 
 # กำหนด working directory ใน container
 WORKDIR /app
